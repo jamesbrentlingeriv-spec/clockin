@@ -107,6 +107,15 @@ export function seedEmployees() {
       }
     });
     tx();
+  } else {
+    // Remove any employees not in the current list (e.g., Linda)
+    const currentNames = ['April', 'Carribyan', 'James', 'Naerobi', 'Robby', 'Tracy'];
+    const existing = database.prepare('SELECT name FROM employees').all() as { name: string }[];
+    for (const emp of existing) {
+      if (!currentNames.includes(emp.name)) {
+        database.prepare('DELETE FROM employees WHERE name = ?').run(emp.name);
+      }
+    }
   }
 }
 
