@@ -112,6 +112,7 @@ export function seedEmployees() {
 
 export function getEmployees(): EmployeeResponse[] {
   const database = getDb();
+  seedEmployees();
   const employees = database.prepare('SELECT * FROM employees ORDER BY name ASC').all() as DbEmployee[];
   return employees.map((emp) => {
     const records = database.prepare(
@@ -148,6 +149,7 @@ export function getEmployees(): EmployeeResponse[] {
 
 export function verifyPin(name: string, pin: string): boolean {
   const database = getDb();
+  seedEmployees();
   const employee = database.prepare('SELECT pin FROM employees WHERE name = ?').get(name) as DbEmployee | undefined;
   return employee ? employee.pin === pin : false;
 }
